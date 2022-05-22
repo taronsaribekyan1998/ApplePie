@@ -7,29 +7,29 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+final class ViewController: UIViewController {
     // MARK: Outlets
     
-    @IBOutlet var treeImageView: UIImageView!
-    @IBOutlet var letterButtons: [UIButton]!
-    @IBOutlet var startButton: UIButton!
-    @IBOutlet var correctWordLabel: UILabel!
-    @IBOutlet var scoreLabel: UILabel!
+    @IBOutlet private var treeImageView: UIImageView!
+    @IBOutlet private var letterButtons: [UIButton]!
+    @IBOutlet private var startButton: UIButton!
+    @IBOutlet private var correctWordLabel: UILabel!
+    @IBOutlet private var scoreLabel: UILabel!
     
     
     // MARK: Properties
     
-    var listOfWords  = ["swift", "bug", "hello", "developer", "programming", "apple", "computer", "smartphone", "application", "software", "screen", "code", "compiler", "error", "system", "designer", "employee", "remote", "job", "beginner", "update", "store", "electronics"]
-    let incorrectMovesAllowed = 7
+    private let listOfWords  = ["swift", "bug", "hello", "developer", "programming", "apple", "computer", "smartphone", "application", "software", "screen", "code", "compiler", "error", "system", "designer", "employee", "remote", "job", "beginner", "update", "store", "electronics"]
+    private let incorrectMovesAllowed = 7
     var currentGame: Game!
     
-    var totalWins = 0 {
+    private var totalWins = 0 {
         didSet {
             newRound()
         }
     }
     
-    var totalLosses = 0 {
+    private var totalLosses = 0 {
         didSet {
             if totalLosses == 3 {
                 gameOverUpdateUI()
@@ -47,7 +47,7 @@ class ViewController: UIViewController {
     
     // MARK: Actions
     
-    @IBAction func startButtonPressed(_ sender: UIButton) {
+    @IBAction private func startButtonPressed(_ sender: UIButton) {
         correctWordLabel.textColor = .black
         sender.isHidden = true
         if totalLosses == 3 {
@@ -60,7 +60,7 @@ class ViewController: UIViewController {
         }
     }
     
-    @IBAction func letterButtonPressed(_ sender: UIButton) {
+    @IBAction private func letterButtonPressed(_ sender: UIButton) {
         sender.isEnabled = false
         let letterString = sender.title(for: .normal)!
         let letter = Character(letterString.lowercased())
@@ -70,20 +70,20 @@ class ViewController: UIViewController {
     
     // MARK: Functions
     
-    func newRound() {
+    private func newRound() {
         let newWord = listOfWords.randomElement()!
         currentGame = Game(word: newWord, incorrectMovesRemaining: incorrectMovesAllowed, guessedLetters: [])
         enableLetterButtons(true)
         updateUI()
     }
     
-    func updateUI() {
+    private func updateUI() {
         correctWordLabel.text = currentGame.formattedWord
         scoreLabel.text = "Wins: \(totalWins), Losses: \(totalLosses)"
         treeImageView.image = UIImage(named: "Tree\(currentGame.incorrectMovesRemaining)")
     }
     
-    func gameOverUpdateUI() {
+    private func gameOverUpdateUI() {
         treeImageView.image = UIImage(named: "Tree0")
         enableLetterButtons(false)
         correctWordLabel.text = "Game Over"
@@ -92,7 +92,7 @@ class ViewController: UIViewController {
         startButton.isHidden = false
     }
     
-    func updateGameState() {
+    private func updateGameState() {
         if currentGame.incorrectMovesRemaining == 0 {
             totalLosses += 1
         } else if currentGame.word == currentGame.formattedWord {
@@ -103,7 +103,7 @@ class ViewController: UIViewController {
         }
     }
     
-    func enableLetterButtons(_ enable: Bool) {
+    private func enableLetterButtons(_ enable: Bool) {
         for button in letterButtons {
             button.isEnabled = enable
         }
